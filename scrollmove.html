@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <title>마우스 이벤트</title>
+    <style>
+      body {
+        position: relative;
+        background-color: black;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        color: #fff;
+      }
+      .box-wrap {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      .box {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translate(-50%, -50%);
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        transition: width 0.5s, height 0.5s;
+        background: url("icon_portrait\(4\).png") no-repeat center;
+        background-size: cover;
+      }
+
+      .box.active {
+        width: 200px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Test</h1>
+    <div class="box-wrap">
+      <div class="box"></div>
+    </div>
+    <script>
+      const h1 = document.querySelector("h1");
+      const box = document.querySelector(".box");
+      const boxWrap = document.querySelector(".box-wrap");
+      // 마우스 좌표 전달
+      // 도착해야 하는 목표 위치 값
+      let tgX = 0;
+      let tgY = 0;
+      // 현재 위치
+      let x = 0;
+      let y = 0;
+      let speed = 0.02;
+      // 움직힘 함수 정의
+      function moveFn(evet) {
+        // 현재 마우스 위치
+        x = evet.clientX;
+        y = evet.clientY;
+
+        // 위치 값을 글자 출력
+        h1.innerHTML = `X: ${x}, y: ${y}`;
+      }
+      // 마우스를 클릭하면 해당 위치로 이동하기
+      window.addEventListener("mousemove", moveFn);
+      // 박스 크게 만들기
+      box.addEventListener("mouseenter", function () {
+        box.classList.add("active");
+      });
+      box.addEventListener("mouseleave", function () {
+        box.classList.remove("active");
+      });
+      function loop() {
+        // 새로운 도착 위치 값 += (현재위치 - 도착위치) * 속도
+        tgX += (x - tgX) * speed;
+        tgY += (y - tgY) * speed;
+        // 화면 갱신
+        boxWrap.style.transform = `translate(${tgX}px, ${tgY}px)`;
+        // requestAnimationFrame() : 애니메이션을 부드럽게 처리하기 위해서 사용되는 함수
+        window.requestAnimationFrame(loop);
+      }
+      loop();
+    </script>
+  </body>
+</html>
